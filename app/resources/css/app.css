@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    [x-cloak] { display: none !important; }
+
+    html {
+        @apply antialiased;
+    }
+
+    body {
+        @apply bg-ink text-cream font-sans overflow-x-hidden;
+    }
+
+    ::selection {
+        @apply bg-lime-neon text-ink;
+    }
+
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #0b120d; }
+    ::-webkit-scrollbar-thumb { background: #233529; border-radius: 8px; }
+    ::-webkit-scrollbar-thumb:hover { background: #8fc428; }
+}
+
+@layer components {
+    /* film-grain atmosphere layer */
+    .grain::before {
+        content: '';
+        position: fixed;
+        inset: -50%;
+        z-index: 60;
+        pointer-events: none;
+        opacity: .05;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        animation: grain-shift 900ms steps(4) infinite;
+    }
+
+    @keyframes grain-shift {
+        0% { transform: translate(0, 0); }
+        25% { transform: translate(-2%, 3%); }
+        50% { transform: translate(3%, -2%); }
+        75% { transform: translate(-3%, -3%); }
+        100% { transform: translate(2%, 2%); }
+    }
+
+    .glass {
+        @apply bg-ink-card/70 backdrop-blur-xl border border-ink-line rounded-3xl;
+    }
+
+    .btn-primary {
+        @apply inline-flex items-center gap-2 rounded-full bg-lime-neon px-7 py-3.5 font-semibold text-ink
+               transition-all duration-300 hover:shadow-[0_0_40px_rgba(198,242,78,.5)] hover:-translate-y-0.5 active:translate-y-0;
+    }
+
+    .btn-ghost {
+        @apply inline-flex items-center gap-2 rounded-full border border-ink-line px-7 py-3.5 font-semibold text-cream
+               transition-all duration-300 hover:border-lime-neon hover:text-lime-neon;
+    }
+
+    .chip {
+        @apply inline-flex items-center gap-1.5 rounded-full border border-ink-line bg-ink-soft px-3.5 py-1.5 text-xs font-medium uppercase tracking-widest text-cream-dim;
+    }
+
+    .h-display {
+        @apply font-display font-bold uppercase leading-[0.95] tracking-tight;
+    }
+
+    .text-outline {
+        -webkit-text-stroke: 1.5px rgba(244, 241, 228, .35);
+        color: transparent;
+    }
+
+    .cat-veg { --cat: 198 242 78; }
+    .cat-non_veg { --cat: 255 122 89; }
+    .cat-vegan { --cat: 74 222 176; }
+
+    .cat-text { color: rgb(var(--cat)); }
+    .cat-bg { background-color: rgb(var(--cat)); }
+    .cat-border { border-color: rgb(var(--cat) / .5); }
+    .cat-glow:hover { box-shadow: 0 24px 80px -24px rgb(var(--cat) / .45); }
+
+    /* meal-card 3D tilt (JS sets --rx/--ry) */
+    .tilt {
+        transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(0);
+        transition: transform .18s ease-out;
+        transform-style: preserve-3d;
+    }
+
+    .tilt-pop {
+        transform: translateZ(46px);
+    }
+
+    /* macro ring */
+    .ring-track { stroke: #233529; }
+    .ring-fill {
+        stroke-linecap: round;
+        transition: stroke-dashoffset 1.2s cubic-bezier(.6, 0, .2, 1);
+    }
+
+    /* reveal states (activated by JS; no-JS users still see content) */
+    .js [data-reveal] { opacity: 0; }
+
+    /* nav state */
+    .nav-scrolled { @apply bg-ink/85 backdrop-blur-xl border-b border-ink-line; }
+
+    input[type='text'], input[type='email'], input[type='password'], input[type='date'], input[type='number'], input[type='tel'], select, textarea {
+        @apply bg-ink-soft border-ink-line text-cream rounded-xl focus:border-lime-neon focus:ring-lime-neon/40;
+    }
+
+    label { @apply text-cream-dim; }
+}

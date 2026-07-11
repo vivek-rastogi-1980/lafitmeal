@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 520" fill="none">
+  <defs>
+    <linearGradient id="body" x1="60" y1="0" x2="190" y2="520" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1a2a1f"/>
+      <stop offset="0.55" stop-color="#101a13"/>
+      <stop offset="1" stop-color="#0b120d"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="200" y1="40" x2="120" y2="500" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#c6f24e"/>
+      <stop offset="0.5" stop-color="#4adeb0"/>
+      <stop offset="1" stop-color="#8fc428"/>
+    </linearGradient>
+    <linearGradient id="rimL" x1="40" y1="60" x2="110" y2="480" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4adeb0" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#4adeb0" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- rim glow behind -->
+  <g opacity="0.9" filter="blur(0.4px)">
+    <!-- Silhouette: athletic person, side-3/4, one arm reaching forward to pick -->
+    <path fill="url(#body)" d="
+      M120 34
+      c15 0 27 12 27 27
+      c0 11-6 20-15 25
+      c9 3 17 9 22 18
+      c6 11 8 24 8 37
+      l3 44
+      c1 14 5 27 12 39
+      l10 17
+      c4 7-1 15-9 15
+      c-5 0-9-3-11-7
+      l-12-23
+      c-2 12-3 24-3 36
+      l0 40
+      c0 10 2 20 5 29
+      l14 40
+      c3 8-3 16-11 16
+      c-5 0-10-3-12-8
+      l-16-44
+      c-2-6-4-12-5-18
+      c-1 6-3 12-5 18
+      l-16 44
+      c-2 5-7 8-12 8
+      c-8 0-14-8-11-16
+      l14-40
+      c3-9 5-19 5-29
+      l0-40
+      c0-14-2-28-5-41
+      l-9-36
+      c-2-9-9-16-18-19
+      l-2-1
+      c-9-4-15-13-15-23
+      l0-30
+      c0-13 8-24 20-28
+      c-9-5-15-14-15-25
+      c0-15 12-27 27-27 Z"/>
+
+    <!-- reaching arm toward the dishes (front) -->
+    <path fill="url(#body)" d="
+      M150 150
+      c14-4 29-3 43 3
+      l40 18
+      c8 4 8 15 0 18
+      c-3 1-6 1-9 0
+      l-40-16
+      c-11-4-23-4-34-1
+      c-8 2-15-6-12-14
+      c1-4 5-7 12-8 Z"/>
+  </g>
+
+  <!-- rim light on right edge -->
+  <path stroke="url(#rim)" stroke-width="3.5" stroke-linecap="round" fill="none" opacity="0.95" d="
+    M147 61 c0 11-6 20-15 25
+    M169 104 c6 11 8 24 8 37 l3 44 c1 14 5 27 12 39 l10 17
+    M182 246 c1 12 1 24 0 36 l0 40 c0 10 2 20 5 29 l14 40"/>
+
+  <!-- reaching-arm rim highlight -->
+  <path stroke="url(#rim)" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.9" d="
+    M150 151 c14-4 29-3 43 3 l40 18"/>
+
+  <!-- soft left fill light -->
+  <path stroke="url(#rimL)" stroke-width="6" stroke-linecap="round" fill="none" d="
+    M96 92 c-9 5-15 14-15 27 l0 30
+    M99 330 l-14 40"/>
+
+  <!-- head highlight -->
+  <circle cx="132" cy="55" r="6" fill="#c6f24e" opacity="0.5"/>
+</svg>

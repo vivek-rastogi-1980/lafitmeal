@@ -7,7 +7,7 @@
     <div class="relative aspect-[4/3] overflow-hidden">
         @if ($meal->image_url)
             <img src="{{ $meal->image_url }}" alt="{{ $meal->name }}" loading="lazy"
-                 class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110">
+                 class="food-photo h-full w-full object-cover transition duration-500 group-hover:brightness-110">
         @else
             <div class="grid h-full w-full place-items-center"
                  style="background: radial-gradient(circle at 30% 20%, rgb(var(--cat) / .28), transparent 55%), radial-gradient(circle at 75% 80%, rgb(var(--cat) / .14), #101a13 60%);">
@@ -17,7 +17,7 @@
 
         {{-- badges --}}
         <div class="absolute left-3 top-3 flex gap-2">
-            <span class="cat-bg rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-ink">{{ $meal->category_label }}</span>
+            <span class="cat-badge rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wider">{{ $meal->category_label }}</span>
             @if ($meal->badge)
                 <span class="rounded-full bg-ink/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-cream backdrop-blur">{{ $meal->badge }}</span>
             @endif

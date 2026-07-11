@@ -50,6 +50,91 @@
         @apply bg-ink-card/70 backdrop-blur-xl border border-ink-line rounded-3xl;
     }
 
+    /* luminous frosted glass — the hero card language (ref: floating UI cards) */
+    .glass-lux {
+        @apply rounded-3xl backdrop-blur-2xl;
+        background: linear-gradient(150deg, rgba(244, 241, 228, 0.12), rgba(244, 241, 228, 0.04) 55%, rgba(198, 242, 78, 0.05));
+        border: 1px solid rgba(244, 241, 228, 0.22);
+        box-shadow:
+            inset 0 1px 0 rgba(244, 241, 228, 0.25),
+            0 0 34px -6px rgba(198, 242, 78, 0.22),
+            0 30px 60px -25px rgba(0, 0, 0, 0.85);
+    }
+
+    /* moving light sweep across glass surfaces */
+    .glass-shimmer {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .glass-shimmer::after {
+        content: '';
+        position: absolute;
+        inset: -60% auto -60% -80%;
+        width: 45%;
+        transform: rotate(18deg);
+        background: linear-gradient(90deg, transparent, rgba(244, 241, 228, 0.10), transparent);
+        animation: shimmer-sweep 5.5s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    @keyframes shimmer-sweep {
+        0%, 55% { left: -80%; }
+        95%, 100% { left: 140%; }
+    }
+
+    /* orbiting dish cards in the hero — JS drives transform/opacity/z-index.
+       JS centres each card with translate(calc(-50% ...)) so no margin hack. */
+    .dish-card-3d {
+        will-change: transform, opacity;
+        transition: box-shadow .4s ease;
+    }
+
+    .dish-card-3d .dish-pick {
+        border: 2px solid transparent;
+        transition: border-color .35s ease, box-shadow .35s ease;
+    }
+
+    /* the front-most card = the one being "selected" */
+    .dish-card-3d.is-selected {
+        box-shadow:
+            inset 0 1px 0 rgba(244, 241, 228, 0.3),
+            0 0 40px -4px rgba(198, 242, 78, 0.5),
+            0 30px 60px -22px rgba(0, 0, 0, 0.85);
+    }
+
+    .dish-card-3d.is-selected .dish-pick {
+        border-color: rgb(var(--cat, 198 242 78));
+        box-shadow: inset 0 0 30px -6px rgb(var(--cat, 198 242 78) / .4);
+    }
+
+    /* corner ticks on the selected card, like a viewfinder */
+    .dish-card-3d.is-selected .dish-pick::before,
+    .dish-card-3d.is-selected .dish-pick::after {
+        content: '';
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgb(var(--cat, 198 242 78));
+    }
+    .dish-card-3d.is-selected .dish-pick::before { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
+    .dish-card-3d.is-selected .dish-pick::after { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+
+    /* thin equalizer-style macro bar */
+    .macro-bar {
+        @apply h-1.5 rounded-full bg-ink-line overflow-hidden;
+    }
+
+    .macro-bar > span {
+        @apply block h-full rounded-full;
+        animation: macro-pulse 3.2s ease-in-out infinite;
+    }
+
+    @keyframes macro-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.75; }
+    }
+
     .btn-primary {
         @apply inline-flex items-center gap-2 rounded-full bg-lime-neon px-7 py-3.5 font-semibold text-ink
                transition-all duration-300 hover:shadow-[0_0_40px_rgba(198,242,78,.5)] hover:-translate-y-0.5 active:translate-y-0;
@@ -81,6 +166,37 @@
     .cat-bg { background-color: rgb(var(--cat)); }
     .cat-border { border-color: rgb(var(--cat) / .5); }
     .cat-glow:hover { box-shadow: 0 24px 80px -24px rgb(var(--cat) / .45); }
+
+    /* category pill (Veg / Non-Veg / Vegan) — legible on any photo behind it:
+       solid category colour, dark ink text, white inset hairline + shadow to
+       lift it off busy food photography. */
+    .cat-badge {
+        background-color: rgb(var(--cat));
+        color: #0b120d;
+        box-shadow:
+            inset 0 0 0 1px rgba(255, 255, 255, 0.5),
+            0 3px 12px -2px rgb(var(--cat) / 0.55),
+            0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    /* food photography — slow, always-on Ken-Burns drift so every dish feels alive */
+    @keyframes food-kenburns {
+        0%   { transform: scale(1); }
+        50%  { transform: scale(1.09); }
+        100% { transform: scale(1); }
+    }
+
+    .food-photo {
+        animation: food-kenburns 18s ease-in-out infinite;
+        will-change: transform;
+    }
+
+    /* pause the drift on hover so the card's own hover effect reads cleanly */
+    .group:hover .food-photo { animation-play-state: paused; }
+
+    @media (prefers-reduced-motion: reduce) {
+        .food-photo { animation: none; }
+    }
 
     /* meal-card 3D tilt (JS sets --rx/--ry) */
     .tilt {

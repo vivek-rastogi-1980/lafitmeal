@@ -5,8 +5,8 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
-// Load the Three.js hero only where the canvas exists (code-split chunk)
-const heroCanvas = document.getElementById('hero-canvas');
-if (heroCanvas) {
-    import('./hero3d.js').then(({ initHero3D }) => initHero3D(heroCanvas));
+// Hero: orbiting glass dishes around the person (code-split, only on home)
+const heroStage = document.querySelector('[data-hero-stage]');
+if (heroStage) {
+    import('./hero-carousel.js').then(({ initHeroCarousel }) => initHeroCarousel(heroStage));
 }

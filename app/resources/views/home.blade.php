@@ -2,49 +2,107 @@
 
 @section('content')
 
-{{-- ============ HERO ============ --}}
+{{-- ============ HERO — person selecting from orbiting glass dishes ============ --}}
 <section data-hero class="relative flex min-h-screen items-center overflow-hidden">
-    {{-- 3D particle bowl --}}
-    <div class="absolute inset-0">
-        <canvas id="hero-canvas" class="h-full w-full"></canvas>
+    {{-- ambient backdrop --}}
+    <div class="pointer-events-none absolute inset-0">
+        @if ($heroMeal?->image_url)
+            <img src="{{ $heroMeal->image_url }}" alt="" aria-hidden="true"
+                 class="h-full w-full scale-110 object-cover opacity-20 blur-2xl saturate-[1.15]">
+        @endif
+        <div class="absolute inset-0" style="background: radial-gradient(ellipse at 50% 42%, transparent 0%, rgba(11,18,13,.72) 55%, #0b120d 90%);"></div>
+        <span class="absolute -left-24 top-1/4 h-96 w-96 rounded-full bg-lime-neon/10 blur-3xl"></span>
+        <span class="absolute -right-24 bottom-1/4 h-96 w-96 rounded-full bg-mint/10 blur-3xl"></span>
     </div>
 
-    {{-- radial vignette --}}
-    <div class="pointer-events-none absolute inset-0" style="background: radial-gradient(ellipse at center, transparent 30%, #0b120d 85%);"></div>
-
-    {{-- floating ingredients --}}
-    <span data-depth="0.9" class="pointer-events-none absolute left-[8%] top-[22%] animate-float text-5xl opacity-80" style="animation-delay:-1s">🥦</span>
-    <span data-depth="1.4" class="pointer-events-none absolute right-[12%] top-[18%] animate-float text-6xl opacity-80" style="animation-delay:-3s">🍅</span>
-    <span data-depth="0.7" class="pointer-events-none absolute left-[16%] bottom-[24%] animate-float text-4xl opacity-70" style="animation-delay:-5s">🌶️</span>
-    <span data-depth="1.1" class="pointer-events-none absolute right-[18%] bottom-[30%] animate-float text-5xl opacity-70" style="animation-delay:-2s">🥕</span>
-    <span data-depth="1.8" class="pointer-events-none absolute left-[42%] top-[12%] animate-float text-3xl opacity-60" style="animation-delay:-4s">🌿</span>
-
-    <div class="relative z-10 mx-auto w-full max-w-7xl px-5 pt-24 lg:px-8">
-        <div class="max-w-4xl">
+    <div class="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-8 px-5 pb-20 pt-28 lg:grid-cols-[0.9fr_1.1fr] lg:gap-6 lg:px-8">
+        {{-- ===== left: headline ===== --}}
+        <div class="text-center lg:text-left">
             <div class="overflow-hidden"><p data-hero-line class="chip mb-6">⚡ Subscription meals · Veg / Non-Veg / Vegan</p></div>
-            <h1 class="h-display text-[13vw] md:text-8xl">
+            <h1 class="h-display text-[12vw] sm:text-6xl xl:text-7xl">
                 <span class="block overflow-hidden"><span data-hero-line class="block">Eat like</span></span>
                 <span class="block overflow-hidden"><span data-hero-line class="block">it's <span class="text-lime-neon">designed</span></span></span>
                 <span class="block overflow-hidden"><span data-hero-line class="block text-outline">for your body</span></span>
             </h1>
-            <p data-hero-fade class="mt-7 max-w-xl text-lg leading-relaxed text-cream-dim">
-                135+ chef-crafted meals with every macro counted. Build your weekly plan,
-                skip any day before cutoff, and your wallet keeps the change. Minimum 15-day plan — maximum life upgrade.
+            <p data-hero-fade class="mx-auto mt-7 max-w-md text-lg leading-relaxed text-cream-dim lg:mx-0">
+                Spin through 135+ chef-crafted meals, pick what fuels you, and we deliver.
+                Skip any day before cutoff — your wallet keeps the change.
             </p>
-            <div data-hero-fade class="mt-10 flex flex-wrap items-center gap-4">
+            <div data-hero-fade class="mt-10 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
                 <a href="{{ route(auth()->check() ? 'plan.create' : 'register') }}" data-magnet class="btn-primary animate-pulse-glow text-base">Build my plan →</a>
                 <a href="{{ route('menu') }}" data-magnet class="btn-ghost text-base">Explore the menu</a>
             </div>
-            <div data-hero-fade class="mt-14 flex flex-wrap gap-10 text-sm text-cream-dim">
+            <div data-hero-fade class="mt-12 flex flex-wrap justify-center gap-10 text-sm text-cream-dim lg:justify-start">
                 <div><p class="font-display text-3xl font-bold text-cream"><span data-count="{{ $stats['meals'] }}">0</span>+</p><p class="mt-1">unique meals</p></div>
                 <div><p class="font-display text-3xl font-bold text-cream"><span data-count="{{ $stats['avgProtein'] }}">0</span>g</p><p class="mt-1">avg. protein / meal</p></div>
                 <div><p class="font-display text-3xl font-bold text-cream"><span data-count="15">0</span> days</p><p class="mt-1">minimum plan</p></div>
             </div>
         </div>
+
+        {{-- ===== right: 3D orbit stage — person + rotating dish cards ===== --}}
+        <div data-hero-fade class="relative">
+            <div data-hero-stage class="relative mx-auto h-[520px] w-full max-w-xl select-none sm:h-[600px]">
+
+                {{-- floor glow the person stands on --}}
+                <div class="pointer-events-none absolute bottom-16 left-1/2 h-16 w-64 -translate-x-1/2 rounded-[100%] bg-lime-neon/20 blur-2xl"></div>
+
+                {{-- the fit person (rim-lit silhouette; swap for AI photo when ready) --}}
+                <div class="pointer-events-none absolute bottom-10 left-1/2 z-[100] -translate-x-1/2" style="height: 78%;">
+                    <img src="{{ asset('images/hero-athlete.svg') }}" alt="A fit person choosing a healthy meal"
+                         class="h-full w-auto drop-shadow-[0_24px_40px_rgba(0,0,0,.6)]">
+                </div>
+
+                {{-- orbiting dish cards --}}
+                <div data-hero-ring class="absolute inset-0">
+                    @foreach ($heroCarousel as $dish)
+                        <a href="{{ route('meals.show', $dish) }}" data-dish
+                           data-name="{{ $dish->name }}"
+                           data-cat="{{ $dish->category_label }}"
+                           data-kcal="{{ $dish->calories }}"
+                           data-protein="{{ $dish->protein_g }}"
+                           class="dish-card-3d glass-lux glass-shimmer cat-{{ $dish->category }} absolute left-1/2 top-1/2 w-[132px] overflow-hidden sm:w-[164px]">
+                            <div class="relative aspect-square overflow-hidden rounded-t-3xl">
+                                @if ($dish->image_url)
+                                    <img src="{{ $dish->image_url }}" alt="{{ $dish->name }}" loading="lazy" class="food-photo h-full w-full object-cover">
+                                @endif
+                                <span class="cat-badge absolute left-2 top-2 rounded-full px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider">{{ $dish->category_label }}</span>
+                            </div>
+                            <div class="p-3">
+                                <p class="truncate font-display text-[11px] font-bold uppercase leading-tight">{{ $dish->name }}</p>
+                                <div class="mt-1.5 flex items-center justify-between text-[10px] text-cream-dim">
+                                    <span>🔥 {{ $dish->calories }}</span>
+                                    <span class="cat-text font-semibold">{{ $dish->protein_g }}g protein</span>
+                                </div>
+                            </div>
+                            {{-- selection reticle (shown on the front card) --}}
+                            <span class="dish-pick pointer-events-none absolute inset-0 rounded-3xl"></span>
+                        </a>
+                    @endforeach
+                </div>
+
+                {{-- HUD: what the person is currently selecting --}}
+                <div data-hero-hud class="glass-lux absolute bottom-2 left-1/2 z-[120] flex w-[min(92%,360px)] -translate-x-1/2 items-center gap-3 p-3">
+                    <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-lime-neon/15 text-lg">🍽️</span>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-[10px] uppercase tracking-widest text-lime-neon">Selecting…</p>
+                        <p data-hud-name class="truncate text-sm font-bold">—</p>
+                        <p data-hud-macros class="truncate text-[11px] text-cream-dim">—</p>
+                    </div>
+                    <a href="{{ route(auth()->check() ? 'plan.create' : 'register') }}"
+                       class="shrink-0 rounded-full bg-lime-neon px-4 py-2 text-xs font-bold text-ink transition hover:shadow-[0_0_24px_rgba(198,242,78,.5)]">
+                        + Add
+                    </a>
+                </div>
+
+                {{-- manual spin controls --}}
+                <button data-hero-prev aria-label="Previous dish" class="glass-lux absolute left-0 top-1/2 z-[130] grid h-10 w-10 -translate-y-1/2 place-items-center text-lg text-cream transition hover:text-lime-neon">‹</button>
+                <button data-hero-next aria-label="Next dish" class="glass-lux absolute right-0 top-1/2 z-[130] grid h-10 w-10 -translate-y-1/2 place-items-center text-lg text-cream transition hover:text-lime-neon">›</button>
+            </div>
+        </div>
     </div>
 
     {{-- scroll cue --}}
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 text-cream-dim/60">
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-cream-dim/60">
         <div class="flex h-10 w-6 items-start justify-center rounded-full border border-ink-line p-1.5">
             <span class="h-2 w-1 animate-bounce rounded-full bg-lime-neon"></span>
         </div>
@@ -76,12 +134,25 @@
             ['non_veg', 'Non-Veg', '🍗', 'Grilled chicken, tandoori fish, prawn stir-fries — lean protein, serious flavour.', 'text-coral'],
             ['vegan', 'Vegan', '🌱', 'Tofu tikkas, buddha bowls, cashew dal makhani — 100% plants, 0% compromise.', 'text-mint'],
         ] as [$slug, $label, $emoji, $desc, $color])
+            @php $showcase = $categoryShowcase[$slug] ?? null; @endphp
             <a href="{{ route('menu', ['category' => $slug]) }}"
-               class="tilt cat-{{ $slug }} cat-glow group relative overflow-hidden rounded-3xl border border-ink-line bg-ink-card p-8 transition-shadow duration-500">
-                <span class="tilt-pop block text-6xl transition-transform duration-500 group-hover:scale-125 group-hover:-rotate-6">{{ $emoji }}</span>
-                <h3 class="mt-6 font-display text-2xl font-bold uppercase {{ $color }}">{{ $label }}</h3>
-                <p class="mt-3 text-sm leading-relaxed text-cream-dim">{{ $desc }}</p>
-                <p class="mt-6 text-sm font-semibold {{ $color }}">45 meals → </p>
+               class="tilt cat-{{ $slug }} cat-glow glass-lux glass-shimmer group relative block overflow-hidden transition-shadow duration-500">
+                {{-- dish photo --}}
+                <div class="relative aspect-[16/10] overflow-hidden rounded-t-3xl">
+                    @if ($showcase?->image_url)
+                        <img src="{{ $showcase->image_url }}" alt="{{ $label }} — {{ $showcase->name }}" loading="lazy"
+                             class="food-photo h-full w-full object-cover transition duration-500 group-hover:brightness-110">
+                    @endif
+                    <div class="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/15 to-transparent"></div>
+                    <span class="absolute left-4 top-4 rounded-full bg-ink/60 px-3 py-1 text-lg backdrop-blur">{{ $emoji }}</span>
+                    <span class="cat-badge absolute bottom-4 left-4 rounded-full px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider">45 meals</span>
+                </div>
+                {{-- glass body --}}
+                <div class="p-6">
+                    <h3 class="font-display text-2xl font-bold uppercase {{ $color }}">{{ $label }}</h3>
+                    <p class="mt-2.5 text-sm leading-relaxed text-cream-dim">{{ $desc }}</p>
+                    <p class="mt-5 text-sm font-semibold {{ $color }}">Explore the kitchen →</p>
+                </div>
                 <span class="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full blur-3xl" style="background: rgb(var(--cat) / .18)"></span>
             </a>
         @endforeach

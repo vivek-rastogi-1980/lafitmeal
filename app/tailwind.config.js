@@ -9,6 +9,11 @@ export default {
         './resources/views/**/*.blade.php',
     ],
 
+    // These category theme classes are built dynamically in Blade (cat-{{ $category }}),
+    // so the content scanner never sees them literally. Safelist keeps their rules
+    // (which define the --cat colour variable) from being purged.
+    safelist: ['cat-veg', 'cat-non_veg', 'cat-vegan'],
+
     theme: {
         extend: {
             colors: {

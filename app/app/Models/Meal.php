@@ -60,6 +60,23 @@ class Meal extends Model
         return $this->image_path && file_exists(public_path('storage/' . $this->image_path));
     }
 
+    /** Path (relative to storage) of the looping cinemagraph, if one has been generated. */
+    public function getVideoPathAttribute(): string
+    {
+        return 'meals/videos/' . $this->slug . '.mp4';
+    }
+
+    /** Public URL of the animated cinemagraph, or null when only a still image exists. */
+    public function getVideoUrlAttribute(): ?string
+    {
+        return $this->hasVideo() ? asset('storage/' . $this->video_path) : null;
+    }
+
+    public function hasVideo(): bool
+    {
+        return $this->slug && file_exists(public_path('storage/' . $this->video_path));
+    }
+
     /** Emoji used by the animated placeholder tile until real images exist. */
     public function getEmojiAttribute(): string
     {

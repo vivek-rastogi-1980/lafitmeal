@@ -15,7 +15,27 @@ class MenuController extends Controller
             'avgProtein' => (int) Meal::active()->avg('protein_g'),
         ];
 
-        return view('home', compact('featured', 'stats'));
+        // Meals shown inside the hero's rotating glass carousel
+        $heroMeal = Meal::where('slug', 'paneer-tikka-quinoa-bowl')->first();
+        $carouselSlugs = [
+            'paneer-tikka-quinoa-bowl',
+            'grilled-lemon-herb-chicken-sauteed-greens',
+            'crispy-tofu-buddha-bowl',
+            'baked-salmon-with-quinoa-asparagus',
+            'rainbow-buddha-bowl',
+            'berry-acai-smoothie-bowl',
+        ];
+        $heroCarousel = Meal::whereIn('slug', $carouselSlugs)->get()
+            ->sortBy(fn ($m) => array_search($m->slug, $carouselSlugs))->values();
+
+        // One signature dish photo per kitchen for the category cards
+        $categoryShowcase = [
+            'veg' => Meal::where('slug', 'palak-paneer-power-bowl')->first(),
+            'non_veg' => Meal::where('slug', 'grilled-lemon-herb-chicken-sauteed-greens')->first(),
+            'vegan' => Meal::where('slug', 'crispy-tofu-buddha-bowl')->first(),
+        ];
+
+        return view('home', compact('featured', 'stats', 'heroMeal', 'heroCarousel', 'categoryShowcase'));
     }
 
     public function index(Request $request)

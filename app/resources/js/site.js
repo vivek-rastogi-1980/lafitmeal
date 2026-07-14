@@ -74,6 +74,17 @@ document.querySelectorAll('.ring-fill').forEach((ring) => {
     });
 });
 
+/* ---------- Food cinemagraphs ----------
+   Native `autoplay muted loop` already lazy-plays only while on-screen and
+   pauses when scrolled away (browser offscreen-video optimisation). We only
+   step in to honour reduced-motion: strip autoplay so the poster stays still. */
+if (reduceMotion) {
+    document.querySelectorAll('video[data-food-video]').forEach((v) => {
+        v.removeAttribute('autoplay');
+        v.pause();
+    });
+}
+
 /* ---------- 3D tilt cards ---------- */
 if (!reduceMotion && matchMedia('(pointer:fine)').matches) {
     document.querySelectorAll('.tilt').forEach((card) => {

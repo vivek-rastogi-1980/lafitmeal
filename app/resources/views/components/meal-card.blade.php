@@ -5,7 +5,14 @@
 
     {{-- image / animated placeholder --}}
     <div class="relative aspect-[4/3] overflow-hidden">
-        @if ($meal->image_url)
+        @if ($meal->video_url)
+            <video data-food-video poster="{{ $meal->image_url }}"
+                   autoplay loop muted playsinline preload="metadata"
+                   aria-label="{{ $meal->name }}"
+                   class="h-full w-full object-cover transition duration-500 group-hover:brightness-110">
+                <source src="{{ $meal->video_url }}" type="video/mp4">
+            </video>
+        @elseif ($meal->image_url)
             <img src="{{ $meal->image_url }}" alt="{{ $meal->name }}" loading="lazy"
                  class="food-photo h-full w-full object-cover transition duration-500 group-hover:brightness-110">
         @else

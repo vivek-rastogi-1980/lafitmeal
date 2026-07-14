@@ -65,7 +65,7 @@
                                 @if ($dish->image_url)
                                     <img src="{{ $dish->image_url }}" alt="{{ $dish->name }}" loading="lazy" class="food-photo h-full w-full object-cover">
                                 @endif
-                                <span class="cat-badge absolute left-2 top-2 rounded-full px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider" style="color:#ffffff">{{ $dish->category_label }}</span>
+                                <span class="cat-badge absolute left-2 top-2 rounded-full px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider">{{ $dish->category_label }}</span>
                             </div>
                             <div class="p-3">
                                 <p class="truncate font-display text-[11px] font-bold uppercase leading-tight">{{ $dish->name }}</p>
@@ -145,7 +145,7 @@
                     @endif
                     <div class="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/15 to-transparent"></div>
                     <span class="absolute left-4 top-4 rounded-full bg-ink/60 px-3 py-1 text-lg backdrop-blur">{{ $emoji }}</span>
-                    <span class="cat-badge absolute bottom-4 left-4 rounded-full px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider" style="color:#ffffff">45 meals</span>
+                    <span class="cat-badge absolute bottom-4 left-4 rounded-full px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider">45 meals</span>
                 </div>
                 {{-- glass body --}}
                 <div class="p-6">

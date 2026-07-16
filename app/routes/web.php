@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 // Public site
 Route::get('/', [MenuController::class, 'home'])->name('home');
 Route::get('/menu', [MenuController::class, 'index'])->name('menu');
+Route::get('/search', [MenuController::class, 'search'])->name('search');
 Route::get('/meals/{meal:slug}', [MenuController::class, 'show'])->name('meals.show');
 Route::view('/how-it-works', 'how-it-works')->name('how-it-works');
 

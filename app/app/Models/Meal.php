@@ -40,6 +40,22 @@ class Meal extends Model
         return $query->where('is_active', true);
     }
 
+    /** Free-text match across the fields a diner would recognise a meal by. */
+    public function scopeSearch($query, ?string $term)
+    {
+        $term = trim((string) $term);
+
+        if ($term === '') {
+            return $query;
+        }
+
+        return $query->where(function ($q) use ($term) {
+            foreach (['name', 'tagline', 'description'] as $column) {
+                $q->orWhere($column, 'like', '%' . $term . '%');
+            }
+        });
+    }
+
     public function getCategoryLabelAttribute(): string
     {
         return match ($this->category) {

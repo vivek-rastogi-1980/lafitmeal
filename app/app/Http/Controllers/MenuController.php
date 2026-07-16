@@ -42,14 +42,40 @@ class MenuController extends Controller
     {
         $category = $request->query('category');
         $mealTime = $request->query('meal_time');
+        $q = $request->query('q');
 
         $meals = Meal::active()
+            ->search($q)
             ->when(in_array($category, Meal::CATEGORIES), fn ($q) => $q->where('category', $category))
             ->when(in_array($mealTime, Meal::MEAL_TIMES), fn ($q) => $q->where('meal_time', $mealTime))
             ->orderBy('sort_order')
             ->get();
 
-        return view('menu.index', compact('meals', 'category', 'mealTime'));
+        return view('menu.index', compact('meals', 'category', 'mealTime', 'q'));
+    }
+
+    /** Type-ahead results for the header search box. */
+    public function search(Request $request)
+    {
+        $term = trim((string) $request->query('q'));
+
+        if (mb_strlen($term) < 2) {
+            return response()->json([]);
+        }
+
+        $meals = Meal::active()->search($term)->orderBy('sort_order')->take(6)->get();
+
+        return response()->json($meals->map(fn (Meal $meal) => [
+            'name' => $meal->name,
+            'tagline' => $meal->tagline,
+            'category' => $meal->category,
+            'categoryLabel' => $meal->category_label,
+            'calories' => $meal->calories,
+            'protein' => $meal->protein_g,
+            'image' => $meal->image_url,
+            'emoji' => $meal->emoji,
+            'url' => route('meals.show', $meal),
+        ]));
     }
 
     public function show(Meal $meal)

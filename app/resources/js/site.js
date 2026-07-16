@@ -74,6 +74,68 @@ document.querySelectorAll('.ring-fill').forEach((ring) => {
     });
 });
 
+/* ---------- Header meal search ----------
+   Type-ahead over /search. The surrounding <form> still GETs /menu?q=, so the
+   box keeps working if this never boots. */
+document.addEventListener('alpine:init', () => {
+    window.Alpine.data('mealSearch', () => ({
+        q: new URLSearchParams(location.search).get('q') ?? '',
+        results: [],
+        showResults: false,
+        loading: false,
+        active: -1,
+        controller: null,
+
+        async lookup() {
+            const term = this.q.trim();
+
+            if (term.length < 2) {
+                this.results = [];
+                this.close();
+                return;
+            }
+
+            // Drop the previous in-flight request so slow replies can't
+            // overwrite results for a newer keystroke.
+            this.controller?.abort();
+            this.controller = new AbortController();
+            this.loading = true;
+            this.showResults = true;
+
+            try {
+                const res = await fetch(`/search?q=${encodeURIComponent(term)}`, {
+                    signal: this.controller.signal,
+                    headers: { Accept: 'application/json' },
+                });
+                this.results = await res.json();
+                this.active = -1;
+            } catch (err) {
+                if (err.name !== 'AbortError') this.results = [];
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        move(step) {
+            if (!this.showResults || !this.results.length) return;
+            this.active = (this.active + step + this.results.length) % this.results.length;
+        },
+
+        /* Enter opens the highlighted result; otherwise the form submits to /menu. */
+        go(event) {
+            if (this.active >= 0 && this.results[this.active]) {
+                event.preventDefault();
+                location.href = this.results[this.active].url;
+            }
+        },
+
+        close() {
+            this.showResults = false;
+            this.active = -1;
+        },
+    }));
+});
+
 /* ---------- Food cinemagraphs ----------
    Native `autoplay muted` already lazy-plays only while on-screen and
    pauses when scrolled away (browser offscreen-video optimisation). We only

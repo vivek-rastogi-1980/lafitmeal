@@ -46,12 +46,6 @@
                 {{-- floor glow the person stands on --}}
                 <div class="pointer-events-none absolute bottom-16 left-1/2 h-16 w-64 -translate-x-1/2 rounded-[100%] bg-lime-neon/20 blur-2xl"></div>
 
-                {{-- the fit person (rim-lit silhouette; swap for AI photo when ready) --}}
-                <div class="pointer-events-none absolute bottom-10 left-1/2 z-[100] -translate-x-1/2" style="height: 78%;">
-                    <img src="{{ asset('images/hero-athlete.svg') }}" alt="A fit person choosing a healthy meal"
-                         class="h-full w-auto drop-shadow-[0_24px_40px_rgba(0,0,0,.6)]">
-                </div>
-
                 {{-- orbiting dish cards --}}
                 <div data-hero-ring class="absolute inset-0">
                     @foreach ($heroCarousel as $dish)
@@ -139,7 +133,14 @@
                class="tilt cat-{{ $slug }} cat-glow glass-lux glass-shimmer group relative block overflow-hidden transition-shadow duration-500">
                 {{-- dish photo --}}
                 <div class="relative aspect-[16/10] overflow-hidden rounded-t-3xl">
-                    @if ($showcase?->image_url)
+                    @if ($showcase?->video_url)
+                        <video data-food-video poster="{{ $showcase->image_url }}"
+                               autoplay muted playsinline preload="metadata"
+                               aria-label="{{ $label }} — {{ $showcase->name }}"
+                               class="h-full w-full object-cover transition duration-500 group-hover:brightness-110">
+                            <source src="{{ $showcase->video_url }}" type="video/mp4">
+                        </video>
+                    @elseif ($showcase?->image_url)
                         <img src="{{ $showcase->image_url }}" alt="{{ $label }} — {{ $showcase->name }}" loading="lazy"
                              class="food-photo h-full w-full object-cover transition duration-500 group-hover:brightness-110">
                     @endif

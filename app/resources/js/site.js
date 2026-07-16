@@ -75,13 +75,23 @@ document.querySelectorAll('.ring-fill').forEach((ring) => {
 });
 
 /* ---------- Food cinemagraphs ----------
-   Native `autoplay muted loop` already lazy-plays only while on-screen and
+   Native `autoplay muted` already lazy-plays only while on-screen and
    pauses when scrolled away (browser offscreen-video optimisation). We only
    step in to honour reduced-motion: strip autoplay so the poster stays still. */
 if (reduceMotion) {
     document.querySelectorAll('video[data-food-video]').forEach((v) => {
         v.removeAttribute('autoplay');
         v.pause();
+    });
+} else {
+    /* Video plays once on load (no loop). Replay it from the start when the
+       user hovers its card. */
+    document.querySelectorAll('video[data-food-video]').forEach((v) => {
+        const card = v.closest('a') || v.parentElement;
+        card.addEventListener('pointerenter', () => {
+            v.currentTime = 0;
+            v.play().catch(() => {});
+        });
     });
 }
 

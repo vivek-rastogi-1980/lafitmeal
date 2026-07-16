@@ -39,7 +39,14 @@
                 <div class="absolute inset-6 animate-spin-slow rounded-full border border-ink-line/50" style="animation-direction: reverse; animation-duration: 20s;"></div>
                 <div class="tilt absolute inset-12 overflow-hidden rounded-full border-2 shadow-2xl cat-border"
                      style="box-shadow: 0 40px 120px -20px rgb(var(--cat) / .4);">
-                    @if ($meal->image_url)
+                    @if ($meal->video_url)
+                        <video data-food-video poster="{{ $meal->image_url }}"
+                               autoplay muted playsinline preload="metadata"
+                               aria-label="{{ $meal->name }}"
+                               class="h-full w-full object-cover">
+                            <source src="{{ $meal->video_url }}" type="video/mp4">
+                        </video>
+                    @elseif ($meal->image_url)
                         <img src="{{ $meal->image_url }}" alt="{{ $meal->name }}" class="h-full w-full object-cover">
                     @else
                         <div class="grid h-full w-full place-items-center"

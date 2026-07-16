@@ -7,7 +7,7 @@
     <div class="relative aspect-[4/3] overflow-hidden">
         @if ($meal->video_url)
             <video data-food-video poster="{{ $meal->image_url }}"
-                   autoplay loop muted playsinline preload="metadata"
+                   autoplay muted playsinline preload="metadata"
                    aria-label="{{ $meal->name }}"
                    class="h-full w-full object-cover transition duration-500 group-hover:brightness-110">
                 <source src="{{ $meal->video_url }}" type="video/mp4">
